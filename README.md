@@ -120,7 +120,6 @@ rear = (rear + 1) % MAX;
 
 When rear reaches the last position, it wraps around to 0.
 
-Final Comparison
 Feature	Linear Queue	Circular Queue
 Principle	FIFO	FIFO
 ENQUEUE	O(1)	O(1)
