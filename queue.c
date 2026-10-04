@@ -1,86 +1,153 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-// Full vs Empty is distinguished using a separate 'count' variable:
-//   empty -> count == 0
-//   full  -> count == capacity
-typedef struct {
-    int *arr;
-    int front, rear, count, capacity;
-} CircularQueue;
+#define MAX 5
 
-void init(CircularQueue *q, int size) {
-    q->arr = (int *)malloc(size * sizeof(int));
-    q->capacity = size;
-    q->front = 0;
-    q->rear = -1;
-    q->count = 0;
+int queue[MAX];
+int front = -1;
+int rear = -1;
+
+// Check whether queue is empty
+int isEmpty()
+{
+    return front == -1;
 }
 
-int isEmpty(CircularQueue *q) { return q->count == 0; }
-int isFull(CircularQueue *q)  { return q->count == q->capacity; }
-
-void enqueue(CircularQueue *q, int x) {
-    if (isFull(q)) {
-        printf("Queue is FULL! Cannot enqueue %d\n", x);
-        return;
-    }
-    q->rear = (q->rear + 1) % q->capacity;
-    q->arr[q->rear] = x;
-    q->count++;
-    printf("%d enqueued.\n", x);
+// Check whether queue is full
+int isFull()
+{
+    return (rear + 1) % MAX == front;
 }
 
-void dequeue(CircularQueue *q) {
-    if (isEmpty(q)) {
-        printf("Queue is EMPTY! Nothing to dequeue.\n");
+// ENQUEUE operation
+void ENQUEUE(int x)
+{
+    if (isFull())
+    {
+        printf("Queue Overflow! Queue is full.\n");
         return;
     }
-    printf("%d dequeued.\n", q->arr[q->front]);
-    q->front = (q->front + 1) % q->capacity;
-    q->count--;
+
+    // First element
+    if (front == -1)
+    {
+        front = 0;
+    }
+
+    rear = (rear + 1) % MAX;
+    queue[rear] = x;
+
+    printf("%d inserted into queue.\n", x);
 }
 
-void frontElement(CircularQueue *q) {
-    if (isEmpty(q)) {
-        printf("Queue is EMPTY.\n");
+// DEQUEUE operation
+void DEQUEUE()
+{
+    if (isEmpty())
+    {
+        printf("Queue Underflow! Queue is empty.\n");
         return;
     }
-    printf("Front element: %d\n", q->arr[q->front]);
+
+    printf("%d deleted from queue.\n", queue[front]);
+
+    // Only one element was present
+    if (front == rear)
+    {
+        front = -1;
+        rear = -1;
+    }
+    else
+    {
+        front = (front + 1) % MAX;
+    }
 }
 
-void display(CircularQueue *q) {
-    if (isEmpty(q)) {
-        printf("Queue is EMPTY.\n");
+// FRONT operation
+void FRONT()
+{
+    if (isEmpty())
+    {
+        printf("Queue is empty.\n");
         return;
     }
-    printf("Queue (front -> rear): ");
-    for (int i = 0; i < q->count; i++)
-        printf("%d ", q->arr[(q->front + i) % q->capacity]);
+
+    printf("Front element = %d\n", queue[front]);
+}
+
+// DISPLAY operation
+void DISPLAY()
+{
+    int i;
+
+    if (isEmpty())
+    {
+        printf("Queue is empty.\n");
+        return;
+    }
+
+    printf("Queue elements are: ");
+
+    i = front;
+
+    while (1)
+    {
+        printf("%d ", queue[i]);
+
+        if (i == rear)
+        {
+            break;
+        }
+
+        i = (i + 1) % MAX;
+    }
+
     printf("\n");
 }
 
-int main() {
-    CircularQueue q;
-    int size, choice, x;
+int main()
+{
+    int choice, value;
 
-    printf("Enter queue size: ");
-    scanf("%d", &size);
-    init(&q, size);
+    while (1)
+    {
+        printf("\n--- CIRCULAR QUEUE MENU ---\n");
+        printf("1. ENQUEUE\n");
+        printf("2. DEQUEUE\n");
+        printf("3. FRONT\n");
+        printf("4. DISPLAY\n");
+        printf("5. EXIT\n");
 
-    do {
-        printf("\n1.ENQUEUE  2.DEQUEUE  3.FRONT  4.DISPLAY  5.EXIT\nChoice: ");
+        printf("Enter your choice: ");
         scanf("%d", &choice);
-        switch (choice) {
-            case 1: printf("Enter value: "); scanf("%d", &x); enqueue(&q, x); break;
-            case 2: dequeue(&q); break;
-            case 3: frontElement(&q); break;
-            case 4: display(&q); break;
-            case 5: printf("Bye!\n"); break;
-            default: printf("Invalid choice.\n");
-        }
-    } while (choice != 5);
 
-    free(q.arr);
+        switch (choice)
+        {
+            case 1:
+                printf("Enter value: ");
+                scanf("%d", &value);
+                ENQUEUE(value);
+                break;
+
+            case 2:
+                DEQUEUE();
+                break;
+
+            case 3:
+                FRONT();
+                break;
+
+            case 4:
+                DISPLAY();
+                break;
+
+            case 5:
+                printf("Program terminated.\n");
+                return 0;
+
+            default:
+                printf("Invalid choice!\n");
+        }
+    }
+
     return 0;
 }
