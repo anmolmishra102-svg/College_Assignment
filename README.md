@@ -120,16 +120,23 @@ rear = (rear + 1) % MAX;
 
 When rear reaches the last position, it wraps around to 0.
 
-Feature	Linear Queue	Circular Queue
-Principle	FIFO	FIFO
-ENQUEUE	O(1)	O(1)
-DEQUEUE	O(1)	O(1)
-DISPLAY	O(n)	O(n)
-Space	O(n)	O(n)
-Reuses freed positions	No	Yes
-Rear wraps around	No	Yes
-False overflow	Possible	Avoided
-Memory utilization	Less efficient	More efficient
+## Final Comparison
+
+| Feature | Linear Queue | Circular Queue |
+|---|---|---|
+| Principle | FIFO | FIFO |
+| ENQUEUE | O(1) | O(1) |
+| DEQUEUE | O(1) | O(1) |
+| DISPLAY | O(n) | O(n) |
+| Space Complexity | O(n) | O(n) |
+| Memory Utilization | Less efficient | More efficient |
+| Reuse of Empty Positions | No | Yes |
+| Rear Movement | Moves only forward | Wraps around |
+| False Overflow | Possible | Avoided |
+| Implementation | Simpler | Slightly more complex |
+| Full Condition | `rear == MAX - 1` | `(rear + 1) % MAX == front` |
+| Empty Condition | `front > rear` / implementation dependent | `front == -1` |
+
 
 Important conditions in the circular queue program:
 
